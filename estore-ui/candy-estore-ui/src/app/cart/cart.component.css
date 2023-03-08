@@ -1,0 +1,81 @@
+ul, .cart, .user__controls > p, .receipt{
+    list-style: none;
+}
+
+ul{
+    padding-left: 0;
+}
+
+.cart, .cart__subtitle{
+    display: flex;
+    column-gap: 20%;
+    align-items: center;
+    border-bottom: 2px solid black;
+}
+
+.cart__subtitle{
+    column-gap: 33%;
+}
+.cart__subtitle > p{
+    font-size: 20px;
+    margin-left: 5px;
+}
+.user__controls > p, .remove__item{
+    margin: 10px 5px 10px 5px; 
+    font: bold 15px "Times New Roman", Times, serif;
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+}
+
+.user__controls{
+    display: flex;
+    align-items: center;
+}
+
+.user__controls > button, .remove__item, .user__purchase > button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: darkorchid;
+    font: bold 15px "Times New Roman", Times, serif;
+    color: lightpink;
+    text-decoration: none;
+    padding: 5px 10px 5px 10px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    border-radius: 20px;
+}
+
+.user__controls > button:hover, .remove__item:hover, .user__purchase > button:hover{
+    text-decoration: underline;
+    background-color: darkslateblue;
+}
+
+
+.user__controls > button:disabled{
+    display: none;
+}
+
+.receipt__subtitle{
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid black;
+}
+
+.receipt{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px solid black;
+    margin-bottom: 5px;
+}
+
+.receipt > p{
+    margin-left: 5px;
+    font-size: 15px;
+}
+
+

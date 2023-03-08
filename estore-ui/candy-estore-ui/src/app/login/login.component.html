@@ -1,0 +1,25 @@
+<div *ngIf="IsUserLoggedIn() === false">
+    <div class="login">
+        <h2>Login page</h2>
+        <div class = "login__grid">
+            <div class="login__component">
+            <input [(ngModel)]="usernameLogin">
+            <button (click) = "onClickSubmitLogin()"> Login </button>
+            </div >
+            <div class="login__component">
+            <input [(ngModel)]="usernameCreate">
+            <button (click) = "onClickSubmitCreate()"> Create Account </button>
+            </div>
+            <div class="invalid__component" *ngIf="!isValid">
+                user name is invalid
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="IsUserLoggedIn() === true">
+    <div class="logout">
+        <h2>Logout Page</h2>
+        <button (click) = "onClickLogout()"> Logout From Account </button>
+    </div>
+</div>

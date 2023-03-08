@@ -1,0 +1,136 @@
+.candies {
+  margin: 0 0 2em 0;
+  list-style-type: none;
+  padding: 0;
+  width: 15em;
+}
+
+.edit_candies{
+  list-style-type: none;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: .5rem;
+  margin: 1rem 0;
+  box-sizing: border-box;
+  border: black 2px solid;
+  font-size: 16px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.candies li {
+  position: relative;
+  cursor: pointer;
+}
+
+.candies li:hover {
+  left: .1em;
+}
+
+.candies a {
+  color: white;
+  text-decoration: none;
+  background-color: black;
+  margin: 5px;
+  padding: 5px;
+  height: 2rem;
+  border-radius: 4px;
+  display: block;
+  width: 100%;
+}
+
+.candies a:hover {
+  background-color: gray;
+}
+
+.candies a:active {
+  background-color: darkgray;
+  color: black;
+}
+
+.candies .badge {
+  display: inline-block;
+  font-size: small;
+  color: white;
+  padding: .8rem .7rem 0 .7rem;
+  background-color: darkgoldenrod;
+  position: relative;
+  top: -4px;
+  height: 1.8rem;
+  min-width: 15px;
+  text-align: center;
+  margin-right: 1rem;
+  margin-left: -2%;
+  margin-top: -1px;
+  border-radius: 2px;
+}
+
+.add-button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: darkorchid;
+  font: bold 20px "Times New Roman", Times, serif;
+  color: lightpink;
+  text-decoration: none;
+  padding: 5px 10px 5px 10px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  border-radius: 20px;
+}
+
+.add-button:hover {
+  text-decoration: underline;
+  background-color: darkslateblue;
+}
+
+button.delete {
+  position: absolute;
+  left: 210px;
+  top: 5px;
+  background-color: white;
+  color:  #525252;
+  font-size: 1.1rem;
+  margin: 0;
+  padding: 1px 10px 3px 10px;
+}
+
+button.delete:hover {
+  background-color: darkred;
+  color: white;
+}
+
+li {
+  list-style-type: none;
+}
+.search-result li a {
+  border: 2px black solid;
+  border-radius: 10px;
+  display: inline-block;
+  width: 100%;
+  max-width: 600px;
+  padding: .5rem;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-size: 16px;
+  font-family: 'Times New Roman', Times, serif;
+  background-color: goldenrod;
+  color: white;
+}
+
+.search-result li a:hover {
+  text-decoration: underline; 
+}
+
+.search-result li a:active{
+  background-color: lavenderblush;
+  color: black;
+}
+
+ul.search-result {
+  margin-top: 0;
+  padding-left: 0;
+}

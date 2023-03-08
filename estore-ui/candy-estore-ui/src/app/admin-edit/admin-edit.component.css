@@ -1,0 +1,44 @@
+button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: darkorchid;
+    font: bold 20px "Times New Roman", Times, serif;
+    color: lightpink;
+    text-decoration: none;
+    padding: 5px 10px 5px 10px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    border-radius: 20px;
+  }
+  
+button:hover {
+    text-decoration: underline;
+    background-color: darkslateblue;
+}
+
+.edit__candies{
+    display: flex;
+    flex-direction: column;
+}
+
+.candy__description{
+    display: flex;
+    gap: 10px;
+}
+
+.candy__description > input{
+    width: 85%;
+    font-size: 15px;
+    border: #333333 2px solid;
+}
+
+.candy__description > label{
+    text-align: end;
+    width: 10%;
+    padding-top: 3px;
+    font-size: 17px;
+}
+
+

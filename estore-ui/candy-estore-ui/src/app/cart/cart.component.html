@@ -1,0 +1,39 @@
+<div *ngIf="purchased === false">
+    <div class="cart__subtitle">
+        <p>Candy Products</p>
+        <p>Amount in Cart</p>
+    </div>
+    <ul>
+        <li class = "cart" *ngFor="let instance of getCart() | keyvalue">
+            <cart-app-candy-detail [id]=+instance.key></cart-app-candy-detail>
+            
+            <div class="user__controls">
+                <button  (click) = "changeAmount(instance.key, instance.value -1)"> -1</button>
+
+                <p>In Cart: {{instance.value}}</p>
+                
+                <button  (click) = "changeAmount(instance.key, instance.value +1)" *ngIf="validAmount(instance.key, instance.value+1)"> +1</button>
+                <button  (click) = "changeAmount(instance.key, instance.value +1)" *ngIf="validAmount(instance.key, instance.value+1) === false" disabled> +1</button>
+            </div>
+
+            <button class="remove__item" (click) = "removeFromCart(instance.key)"> Remove Item </button>
+            
+        </li>
+    </ul>
+
+    <div class="user__purchase">
+        <p>Cart Total: ${{cartTotal()}}</p>
+        <button  (click) = "purchaseCart()" *ngIf="validateCart()"> Purchase Cart</button>
+        <p *ngIf="validateCart() === false">Invalid cart, Please Fix</p>
+    </div>
+</div>
+
+<div *ngIf="purchased === true">
+    <p class="receipt__subtitle">Receipt</p>
+    <ul>
+        <li class="receipt" *ngFor="let instance of getpreviousOrder() | keyvalue">
+            <cart-app-candy-detail [id]=+instance.key></cart-app-candy-detail>
+            <p>Amount Purchased: {{instance.value}}</p>
+        </li>
+    </ul>
+</div>

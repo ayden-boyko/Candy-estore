@@ -1,0 +1,30 @@
+<!-- edit candies -->
+<div *ngIf="candy">
+      <h2>{{ candy.name | uppercase}} Details</h2>
+      <div class="edit__candies">
+        <div class="candy__description">
+            <label for="candy-name">Candy Name: </label>
+            <input id="candy-name" [(ngModel)]="candy.name" placeholder="Candy Name" />
+        </div>
+        <div class="candy__description">
+          <label for="candy-amount">Candy Amount: </label>
+          <input id="candy-amount" [(ngModel)]="candy.amount" placeholder="Candy Amount" />
+        </div>
+        <div class="candy__description">
+          <label for="candy-price">Candy Price: </label>
+          <input id="candy-price" [(ngModel)]="candy.price" placeholder="Candy Price" />
+        </div>
+        <div class="candy__description">
+            <label for="candy-description">Candy description: </label>
+            <input id="candy-description" [(ngModel)]="candy.description" placeholder="Candy description" />
+        </div>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-primary candy-btn" (click)="goBack()">
+            go back
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary candy-btn" (click)="edit()">
+            save
+          </button>
+        </div>
+      </div>
+  </div>

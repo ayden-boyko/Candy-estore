@@ -1,0 +1,89 @@
+<h2>Adding Candies</h2>
+
+<!-- adding candies --> 
+<div>
+    <form #candyForm="ngForm">
+
+        <div class="form-group">
+            <label for="newCandy">Candy Name:</label>
+            <input id="newCandy" class="form-control" [ngClass]="{
+          'is-invalid':
+            (candyForm.submitted && newCandy.invalid) ||
+            (newCandy.touched && newCandy.invalid)
+        }" name="newCandy" #newCandy="ngModel" [(ngModel)]="model.newCandy" #candyName required />
+        </div>
+
+        <div class="form-group">
+            <label for="newAmount">Candy Amount:</label>
+            <input id="newAmount" class="form-control" [ngClass]="{
+          'is-invalid':
+            (candyForm.submitted && newCandy.invalid) ||
+            (newAmount.touched && newAmount.invalid)
+        }" name="newAmount" #newAmount="ngModel" [(ngModel)]="model.newAmount" #candyAmount required />
+        </div>
+
+        <div class="form-group">
+            <label for="newPrice">Candy Price:</label>
+            <input id="newPrice" class="form-control" [ngClass]="{
+          'is-invalid':
+            (candyForm.submitted && newCandy.invalid) ||
+            (newPrice.touched && newPrice.invalid)
+        }" name="newPrice" #newPrice="ngModel" [(ngModel)]="model.newPrice" #candyPrice required />
+        </div>
+
+        <div class="form-group">
+            <label for="newDescription">Candy Description:</label>
+            <input id="newDescription" class="form-control" [ngClass]="{
+          'is-invalid':
+            (candyForm.submitted && newCandy.invalid) ||
+            (newDescription.touched && newDescription.invalid)
+        }" name="newDescription" #newDescription="ngModel" [(ngModel)]="model.newDescription" #candyDescription required />
+        </div>
+
+    </form>
+
+
+    <button type="button" class="add-button" (click)="
+      add(
+        candyName.value,
+        candyAmount.value,
+        candyPrice.value,
+        candyDescription.value
+      );
+      candyName.value = '';
+      candyAmount.value = '';
+      candyPrice.value = '';
+      candyDescription.value = ''
+    ">
+    Add Candy
+  </button>
+
+</div>
+
+<!-- removing candies --> 
+<h2>My Candies</h2>
+
+<ul class="candies">
+  <li *ngFor="let candy of candies">
+    <a routerLink="/admin-edit/{{candy.id}}">
+      <span class="badge">{{candy.id}}</span> {{candy.name}}
+    </a>
+    <button type="button" class="delete" title="delete candy"
+      (click)="delete(candy)">x</button>
+  </li>
+</ul>
+
+
+<!-- edit candies -->
+<div id="search-component">
+  <label for="search-box">Candy Search</label>
+  <input #searchBox id="search-box" (input)="search(searchBox.value)" />
+
+  <ul class="search-result">
+    <li *ngFor="let candy of candies$ | async" >
+      <a routerLink="/admin-edit/{{candy.id}}">
+        {{candy.name}}
+      </a>
+    </li>
+  </ul>
+</div>

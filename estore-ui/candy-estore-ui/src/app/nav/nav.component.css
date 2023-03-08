@@ -1,0 +1,43 @@
+*{
+  background-color: #CCCCCC;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+nav a{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: darkorchid;
+  font: bold 20px "Times New Roman", Times, serif;
+  color: lightpink;
+  text-decoration: none;
+  padding: 5px 10px 5px 10px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  border-radius: 20px;
+}
+
+nav a:hover{
+  text-decoration: underline;
+  background-color: darkslateblue;
+}
+
+
+.nameDisplay{
+  text-align: center;
+  font: bold 30px "Times New Roman", Times, serif;
+  color: darkorchid;
+}
+
+.nameDisplay > p{
+  margin-top: 0%;
+  margin-bottom: 5px;
+  padding-top: 10px;
+}
+

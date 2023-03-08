@@ -1,0 +1,15 @@
+<h2>Our Candies</h2>
+
+<a *ngFor="let candy of candies"
+  routerLink="/detail/{{candy.id}}">
+</a>
+
+<app-candy-search></app-candy-search>
+
+<ul class="candies">
+  <li *ngFor="let candy of candies">
+    <a routerLink="/detail/{{candy.id}}">
+      <span class="badge">${{candy.price}}</span> {{candy.name}}
+    </a>
+  </li>
+</ul>

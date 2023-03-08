@@ -1,0 +1,63 @@
+/* CandyDetailComponent's private CSS styles */
+.candy__flex{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+}
+
+.candy__details{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.candy__details > label{
+  margin-bottom: 10px;
+  color: #000000;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.rating__title{
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: darkorchid;
+  font: bold 20px "Times New Roman", Times, serif;
+  color: lightpink;
+  text-decoration: none;
+  padding: 5px 10px 5px 10px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  border-radius: 20px;
+}
+
+.rating{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rating > div{
+  margin-bottom: 5px;
+}
+
+button:hover {
+  text-decoration: underline;
+  background-color: darkslateblue;
+}
+
+button:disabled {
+  background-color: #eee;
+  color: #ccc;
+  cursor: auto;
+}

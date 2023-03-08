@@ -1,0 +1,10 @@
+.candy__detail{
+    display: flex;
+    flex-direction: column;
+}
+
+.candy__description{
+    font: 15px "Times New Roman", Times, serif;
+    margin: 5px 0px 5px 5px;
+    width: 300px;
+}

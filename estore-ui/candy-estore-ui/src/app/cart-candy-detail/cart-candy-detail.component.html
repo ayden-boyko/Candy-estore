@@ -1,0 +1,8 @@
+<div *ngIf="candy">
+  <div class="candy__detail">
+    <p class="candy__description">Candy: {{candy.name}}</p> 
+    <p class="candy__description">Description: {{candy.description}} </p>
+    <p class="candy__description">Price: ${{candy.price}} </p>
+  </div>
+  <p *ngIf="invalidAmount() === true"> The amount of this candy in this cart is invalid please reduce it</p>
+</div>

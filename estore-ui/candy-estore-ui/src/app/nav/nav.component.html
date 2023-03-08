@@ -1,0 +1,33 @@
+
+<div *ngIf="IsUserLoggedIn() === true">
+    <div *ngIf="IsAdmin() === true">
+        <div class = "nameDisplay">
+            <p>Welcome Admin</p>
+        </div>
+        <nav>
+            <a routerLink="/homepage">Home</a>
+            <a routerLink="/admin">Admin</a>
+            <a routerLink="/login">Logout</a>
+        </nav>
+    </div>
+
+    <div *ngIf="IsAdmin() === false">
+        <div class="nameDisplay">
+            <p>Welcome {{getUser()}}</p>
+        </div>
+        <nav>
+            <a routerLink="/homepage">Home</a>
+            <a routerLink="/candies">Candies</a>
+            <a routerLink="/cart">Cart</a>
+            <a routerLink="/login">Logout</a>
+        </nav>
+    </div>
+</div>
+
+<div *ngIf="IsUserLoggedIn() === false">
+    <nav>
+        <a routerLink="/homepage">Home</a>
+        <a routerLink="/candies">Candies</a>
+        <a routerLink="/login">Login</a>
+    </nav>
+</div>

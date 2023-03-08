@@ -1,0 +1,48 @@
+.login, .logout{
+   padding-top: 10%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   height: 60vh;
+}
+
+.login__grid{
+   display: grid;
+   grid-template-rows: 1fr 1fr 1fr;
+   row-gap: 25%;
+}
+
+.login__component{
+   display: grid;
+   grid-template-columns: 2fr 1fr;
+}
+
+.invalid__component{
+   color: darkred;
+}
+
+.login__component > input{
+   padding: 5px 10px 5px 10px;
+   font: bold 20px "Times New Roman", Times, serif;
+   border: 2px solid #333333;
+}
+
+.login__component > button, .logout > button{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: darkorchid;
+  font: bold 20px "Times New Roman", Times, serif;
+  color: lightpink;
+  text-decoration: none;
+  padding: 5px 10px 5px 10px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  border-radius: 20px;
+}
+
+.login__component > button:hover, .logout > button:hover{
+   text-decoration: underline;
+   background-color: darkslateblue;
+}
