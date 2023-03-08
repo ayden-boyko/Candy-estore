@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerFileDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.persistence</a> &gt; <span class="el_source">CustomerFileDAO.java</span></div><h1>CustomerFileDAO.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.persistence;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Logger;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.estore.api.estoreapi.model.Customer;
+
+/**
+ * Implements the functionality for JSON file-based peristance for customers
+ * 
+ * {@literal @}Component Spring annotation instantiates a single instance of this
+ * class and injects the instance into other classes as needed
+ * 
+ * @author Aitan Bachrach
+ */
+@Component
+public class CustomerFileDAO implements CustomerDAO {
+<span class="fc" id="L27">    private static final Logger LOG = Logger.getLogger(CustomerFileDAO.class.getName());</span>
+    Map&lt;Integer,Customer&gt; customers;   // Provides a local cache of the customer objects
+                                // so that we don't need to read from the file
+                                // each time
+    private ObjectMapper objectMapper;  // Provides conversion between Customer
+                                        // objects and JSON text format written
+                                        // to the file
+    private static int nextId;  // The next Id to assign to a new customer
+    private String filename;    // Filename to read from and write to
+
+    /**
+     * Creates a Customer File Data Access Object
+     * 
+     * @param filename Filename to read from and write to
+     * @param objectMapper Provides JSON Object to/from Java Object serialization and deserialization
+     * 
+     * @throws IOException when file cannot be accessed or read from
+     */
+<span class="fc" id="L45">    public CustomerFileDAO(@Value(&quot;${customers.file}&quot;) String filename,ObjectMapper objectMapper) throws IOException {</span>
+<span class="fc" id="L46">        this.filename = filename;</span>
+<span class="fc" id="L47">        this.objectMapper = objectMapper;</span>
+<span class="fc" id="L48">        load();  // load the customers from the file</span>
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Generates the next id for a new {@linkplain Customer customer}
+     * 
+     * @return The next id
+     */
+    private synchronized static int nextId() {
+<span class="fc" id="L57">        int id = nextId;</span>
+<span class="fc" id="L58">        ++nextId;</span>
+<span class="fc" id="L59">        return id;</span>
+    }
+
+    /**
+     * Generates an array of {@linkplain Customer customers} from the tree map
+     * 
+     * @return  The array of {@link Customer customers}, may be empty
+     */
+    private Customer[] getcustomersArray() {
+<span class="fc" id="L68">        return getcustomersArray(null);</span>
+    }
+
+    /**
+     * Generates an array of {@linkplain Customer customers} from the tree map for any
+     * {@linkplain Customer customers} that contains the text specified by containsText
+     * &lt;br&gt;
+     * If containsText is null, the array contains all of the {@linkplain Customer customers}
+     * in the tree map
+     * 
+     * @return  The array of {@link Customer customers}, may be empty
+     */
+    private Customer[] getcustomersArray(String containsText) { // if containsText == null, no filter
+<span class="fc" id="L81">        ArrayList&lt;Customer&gt; customerArrayList = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (Customer customer : customers.values()) {</span>
+<span class="fc bfc" id="L84" title="All 4 branches covered.">            if (containsText == null || customer.getUsername().contains(containsText)) {</span>
+<span class="fc" id="L85">                customerArrayList.add(customer);</span>
+            }
+<span class="fc" id="L87">        }</span>
+
+<span class="fc" id="L89">        Customer[] customerArray = new Customer[customerArrayList.size()];</span>
+<span class="fc" id="L90">        customerArrayList.toArray(customerArray);</span>
+<span class="fc" id="L91">        return customerArray;</span>
+    }
+
+    /**
+     * Saves the {@linkplain Customer customers} from the map into the file as an array of JSON objects
+     * 
+     * @return true if the {@link Customer customers} were written successfully
+     * 
+     * @throws IOException when file cannot be accessed or written to
+     */
+    private boolean save() throws IOException {
+<span class="fc" id="L102">        Customer[] customerArray = getcustomersArray();</span>
+
+        // Serializes the Java Objects to JSON objects into the file
+        // writeValue will thrown an IOException if there is an issue
+        // with the file or reading from the file
+<span class="fc" id="L107">        objectMapper.writeValue(new File(filename),customerArray);</span>
+<span class="fc" id="L108">        return true;</span>
+    }
+
+    /**
+     * Loads {@linkplain Customer customers} from the JSON file into the map
+     * &lt;br&gt;
+     * Also sets next id to one more than the greatest id found in the file
+     * 
+     * @return true if the file was read successfully
+     * 
+     * @throws IOException when file cannot be accessed or read from
+     */
+    private boolean load() throws IOException {
+<span class="fc" id="L121">        customers = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L122">        nextId = 0;</span>
+
+        // Deserializes the JSON objects from the file into an array of customers
+        // readValue will throw an IOException if there's an issue with the file
+        // or reading from the file
+<span class="fc" id="L127">        Customer[] customerArray = objectMapper.readValue(new File(filename),Customer[].class);</span>
+
+        // Add each customer to the tree map and keep track of the greatest id
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        for (Customer customer : customerArray) {</span>
+<span class="fc" id="L131">            customers.put(customer.getId(),customer);</span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">            if (customer.getId() &gt; nextId)</span>
+<span class="fc" id="L133">                nextId = customer.getId();</span>
+        }
+        // Make the next id one greater than the maximum from the file
+<span class="fc" id="L136">        ++nextId;</span>
+<span class="fc" id="L137">        return true;</span>
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public Customer[] getCustomers() {
+<span class="fc" id="L145">        synchronized(customers) {</span>
+<span class="fc" id="L146">            return getcustomersArray();</span>
+        }
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public Customer[] findCustomers(String containsText) {
+<span class="fc" id="L155">        synchronized(customers) {</span>
+<span class="fc" id="L156">            return getcustomersArray(containsText);</span>
+        }
+    }
+
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public Customer getCustomer(int id) {
+<span class="fc" id="L166">        synchronized(customers) {</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">            if (customers.containsKey(id))</span>
+<span class="fc" id="L168">                return customers.get(id);</span>
+            else
+<span class="fc" id="L170">                return null;</span>
+        }
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public Customer createCustomer(Customer customer) throws IOException {
+<span class="fc" id="L179">        synchronized(customers) {</span>
+            // We create a new customer object because the id field is immutable
+            // and we need to assign the next unique id
+<span class="fc" id="L182">            Customer newcustomer = new Customer(nextId(),customer.getUsername(), customer.getCart());</span>
+<span class="fc" id="L183">            customers.put(newcustomer.getId(), newcustomer);</span>
+<span class="fc" id="L184">            save(); // may throw an IOException</span>
+<span class="fc" id="L185">            return newcustomer;</span>
+        }
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public Customer updateCustomer(Customer customer) throws IOException {
+<span class="fc" id="L194">        synchronized(customers) {</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">            if (customers.containsKey(customer.getId()) == false)</span>
+<span class="fc" id="L196">                return null;  // customer does not exist</span>
+
+<span class="fc" id="L198">            customers.put(customer.getId(),customer);</span>
+<span class="fc" id="L199">            save(); // may throw an IOException</span>
+<span class="fc" id="L200">            return customer;</span>
+        }
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public boolean deleteCustomer(int id) throws IOException {
+<span class="fc" id="L209">        synchronized(customers) {</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">            if (customers.containsKey(id)) {</span>
+<span class="fc" id="L211">                customers.remove(id);</span>
+<span class="fc" id="L212">                return save();</span>
+            }
+            else
+<span class="fc" id="L215">                return false;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

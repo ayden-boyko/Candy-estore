@@ -1,0 +1,7 @@
+com\estore\api\estoreapi\model\CandyTest.class
+com\estore\api\estoreapi\controller\CandyControllerTest.class
+com\estore\api\estoreapi\persistence\CandyFileDAOTest.class
+com\estore\api\estoreapi\EstoreApiApplicationTests.class
+com\estore\api\estoreapi\controller\CustomerControllerTest.class
+com\estore\api\estoreapi\persistence\CustomerFileDAOTest.class
+com\estore\api\estoreapi\model\CustomerTest.class

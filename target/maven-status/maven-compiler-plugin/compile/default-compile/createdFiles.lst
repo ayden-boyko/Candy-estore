@@ -1,0 +1,10 @@
+com\estore\api\estoreapi\controller\CustomerController.class
+com\estore\api\estoreapi\model\Candy.class
+com\estore\api\estoreapi\persistence\CustomerFileDAO.class
+com\estore\api\estoreapi\controller\CandyController.class
+com\estore\api\estoreapi\persistence\CandyDAO.class
+com\estore\api\estoreapi\model\Customer.class
+com\estore\api\estoreapi\WebConfig.class
+com\estore\api\estoreapi\persistence\CandyFileDAO.class
+com\estore\api\estoreapi\EstoreApiApplication.class
+com\estore\api\estoreapi\persistence\CustomerDAO.class

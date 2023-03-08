@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.controller</a> &gt; <span class="el_source">CustomerController.java</span></div><h1>CustomerController.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.estore.api.estoreapi.persistence.CandyDAO;
+import com.estore.api.estoreapi.persistence.CustomerDAO;
+import com.estore.api.estoreapi.model.Customer;
+import com.estore.api.estoreapi.model.Candy;
+
+import java.util.Random;
+
+/**
+ * Handles the REST API requests for the Customer resource
+ * &lt;p&gt;
+ * {@literal @}RestController Spring annotation identifies this class as a REST API
+ * method handler to the Spring framework
+ * 
+ * @author SWEN Faculty
+ */
+
+@RestController
+@RequestMapping(&quot;customers&quot;)
+public class CustomerController {
+<span class="fc" id="L40">    private static final Logger LOG = Logger.getLogger(CustomerController.class.getName());</span>
+    private CustomerDAO CustomerDao;
+    private CandyDAO candyDAO;
+
+    /**
+     * Creates a REST API controller to reponds to requests
+     * 
+     * @param CustomerDao The {@link CustomerDAO Customer Data Access Object} to perform CRUD operations
+     * &lt;br&gt;
+     * This dependency is injected by the Spring Framework
+     */
+<span class="fc" id="L51">    public CustomerController(CustomerDAO CustomerDao, CandyDAO candyDAO) {</span>
+<span class="fc" id="L52">        this.CustomerDao = CustomerDao;</span>
+<span class="fc" id="L53">        this.candyDAO = candyDAO;</span>
+<span class="fc" id="L54">    }</span>
+
+
+    /**
+     * Responds to the GET request for a {@linkplain Customer Customer} for the given id
+     * 
+     * @param id The id used to locate the {@link Customer Customer}
+     * 
+     * @return ResponseEntity with {@link Customer Customer} object and HTTP status of OK if found&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Customer&gt; getCustomer(@PathVariable int id) {
+<span class="fc" id="L68">        LOG.info(&quot;GET /customers/&quot; + id);</span>
+        try {
+<span class="fc" id="L70">            Customer customer = CustomerDao.getCustomer(id);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (customer != null)</span>
+<span class="fc" id="L72">                return new ResponseEntity&lt;Customer&gt;(customer,HttpStatus.OK);</span>
+            else
+<span class="fc" id="L74">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc" id="L76">        catch(IOException e) {</span>
+<span class="fc" id="L77">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L78">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Responds to the GET request for all {@linkplain Candy Candies}
+     * 
+     * @return ResponseEntity with array of {@link Candy Candy} objects (may be empty) and
+     * HTTP status of OK&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @GetMapping(&quot;&quot;)
+    public ResponseEntity&lt;Customer[]&gt; getCustomers() {
+<span class="fc" id="L91">        LOG.info(&quot;GET /customers&quot;);</span>
+
+        try {
+<span class="fc" id="L94">            Customer[] customers = CustomerDao.getCustomers();</span>
+<span class="fc" id="L95">            return new ResponseEntity&lt;Customer[]&gt;(customers,HttpStatus.OK);</span>
+        }
+<span class="fc" id="L97">        catch(IOException e) {</span>
+<span class="fc" id="L98">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L99">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     TODO
+     customer by name
+     */
+    @GetMapping(&quot;/&quot;)
+    public ResponseEntity&lt;Customer&gt; searchCustomers(@RequestParam String name) {
+<span class="fc" id="L109">        LOG.info(&quot;GET /customers/?name=&quot;+name);</span>
+        try{
+<span class="fc" id="L111">            Customer customer[] = CustomerDao.findCustomers(name);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            for (int i = 0; i &lt; customer.length; i++){</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                if (customer[i].getUsername().equals(name)){</span>
+<span class="fc" id="L114">                    return new ResponseEntity&lt;Customer&gt;(customer[i], HttpStatus.OK);</span>
+                }
+            } 
+<span class="fc" id="L117">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc" id="L119">        catch(IOException e){</span>
+<span class="fc" id="L120">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Creates a {@linkplain Customer Customer} with the provided Customer object
+     * 
+     * @param Customer - The {@link Customer Customer} to create
+     * 
+     * @return ResponseEntity with created {@link Customer Customer} object and HTTP status of CREATED&lt;br&gt;
+     * ResponseEntity with HTTP status of CONFLICT if {@link Customer Customer} object already exists&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PostMapping(&quot;&quot;)
+    public ResponseEntity&lt;Customer&gt; createCustomer(@RequestBody Customer customer) {
+<span class="fc" id="L135">        LOG.info(&quot;POST /customers/&quot; + customer);</span>
+        /*
+        try {
+            Customer[] checkAgainst = CustomerDao.findCustomers(customer.getUsername());
+            Boolean alreadyExists = false;
+            for (int i = 0; i&lt;checkAgainst.length; i++){
+                if (checkAgainst[i].getUsername().equals(customer.getUsername())){
+                    alreadyExists = true;
+                    break;
+                }
+            }
+            if (alreadyExists){
+                return new ResponseEntity&lt;Customer&gt;(HttpStatus.CONFLICT);
+            }
+            else{
+            Customer newCustomer = CustomerDao.createCustomer(customer); 
+            return new ResponseEntity&lt;Customer&gt;(newCustomer, HttpStatus.CREATED);
+            }
+        }
+        catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        */
+         
+        try {
+<span class="fc" id="L161">            Customer newCustomer = CustomerDao.createCustomer(customer);</span>
+            // when productFound is false, meaning product is not found
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            if (newCustomer != null) {</span>
+<span class="fc" id="L164">                return new ResponseEntity&lt;&gt;(newCustomer, HttpStatus.CREATED);</span>
+            } else {
+<span class="fc" id="L166">                return new ResponseEntity&lt;&gt;(HttpStatus.CONFLICT);</span>
+            }
+<span class="fc" id="L168">        } catch (IOException e) {</span>
+<span class="fc" id="L169">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L170">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+        
+    }
+
+    /**
+     * Updates the {@linkplain Customer Customer} with the provided {@linkplain Customer Customer} object, if it exists
+     * 
+     * @param Customer The {@link Customer Customer} to update
+     * 
+     * @return ResponseEntity with updated {@link Customer Customer} object and HTTP status of OK if updated&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PutMapping(&quot;&quot;)
+    public ResponseEntity&lt;Customer&gt; updateCustomer(@RequestBody Customer customer) {
+<span class="fc" id="L186">        LOG.info(&quot;PUT /customers &quot; + customer);</span>
+
+        try {
+<span class="fc" id="L189">            Customer customer_updated = CustomerDao.updateCustomer(customer);</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">            if (customer_updated != null)</span>
+<span class="fc" id="L191">                return new ResponseEntity&lt;Customer&gt;(customer_updated,HttpStatus.OK);</span>
+            else
+<span class="fc" id="L193">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc" id="L195">        catch(IOException e) {</span>
+<span class="fc" id="L196">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L197">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Deletes a {@linkplain Customer Customer} with the given id
+     * 
+     * @param id The id of the {@link Customer Customer} to deleted
+     * 
+     * @return ResponseEntity HTTP status of OK if deleted&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Customer&gt; deleteCustomer(@PathVariable int id) {
+<span class="fc" id="L212">        LOG.info(&quot;DELETE/customer/&quot;+id);</span>
+            try{
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                if(CustomerDao.deleteCustomer(id)){</span>
+<span class="fc" id="L215">                    return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+                }
+                else{
+<span class="fc" id="L218">                    return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+                }
+<span class="fc" id="L220">            }catch(IOException e){</span>
+<span class="fc" id="L221">                return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+            }
+    }
+
+    @PostMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Customer&gt; checkoutCart(@PathVariable int id) {
+<span class="fc" id="L227">        LOG.info(&quot;CHECKOUT/customer/&quot;+id);</span>
+<span class="fc" id="L228">        int lbox_counter = 0;</span>
+<span class="fc" id="L229">        int sbox_counter = 0;</span>
+        try {
+<span class="fc" id="L231">            Random numgen = new Random();</span>
+<span class="fc" id="L232">            Customer customer = CustomerDao.getCustomer(id);</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">            if (customer != null){</span>
+<span class="fc" id="L234">                Map&lt;Integer,Integer&gt; cart = customer.getCart();</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">                if (cart.isEmpty()) {</span>
+<span class="fc" id="L236">                    return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+                }
+                else {
+<span class="fc bfc" id="L239" title="All 2 branches covered.">                    for (int key : cart.keySet()) {</span>
+<span class="fc" id="L240">                        int value = cart.get(key);</span>
+<span class="fc" id="L241">                        Candy candy = candyDAO.getCandy(key);</span>
+<span class="fc bfc" id="L242" title="All 4 branches covered.">                        if (candy.getAmount() - value &lt; 0 || value &lt; 0) {</span>
+<span class="fc" id="L243">                            return new ResponseEntity&lt;&gt;(HttpStatus.BAD_REQUEST);</span>
+                        }
+<span class="fc" id="L245">                    }</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">                    for (int key : cart.keySet()) {</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">                        if (key == -1){</span>
+<span class="fc" id="L248">                            sbox_counter += cart.get(key);</span>
+<span class="fc" id="L249">                            Candy candy = candyDAO.getCandy(-1);</span>
+<span class="fc" id="L250">                            candy.setAmount(candy.getAmount()-1);</span>
+<span class="fc" id="L251">                            candyDAO.updateCandy(candy);</span>
+<span class="fc" id="L252">                        }</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">                        else if (key == -2){</span>
+<span class="fc" id="L254">                            lbox_counter += cart.get(key);</span>
+<span class="fc" id="L255">                            Candy candy = candyDAO.getCandy(-2);</span>
+<span class="fc" id="L256">                            candy.setAmount(candy.getAmount()-1);</span>
+<span class="fc" id="L257">                            candyDAO.updateCandy(candy);</span>
+<span class="fc" id="L258">                        }</span>
+                        else {
+<span class="fc" id="L260">                            int value = cart.get(key);</span>
+<span class="fc" id="L261">                            Candy candy = candyDAO.getCandy(key);</span>
+<span class="fc" id="L262">                            candy.setAmount(candy.getAmount()-value);</span>
+<span class="fc" id="L263">                            candyDAO.updateCandy(candy);</span>
+                        } 
+<span class="fc" id="L265">                    }</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">                    if (cart.containsKey(-1)) cart.remove(-1);</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">                    if (cart.containsKey(-2)) cart.remove(-2);</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">                    while(sbox_counter &gt; 0){</span>
+<span class="fc bfc" id="L269" title="All 2 branches covered.">                        for (int i = 0; i &lt; 10; i++) {</span>
+                            Candy gencandy;
+<span class="fc" id="L271">                            int randomcandy = numgen.nextInt(candyDAO.getNextId());</span>
+                            while (true) {
+<span class="fc bfc" id="L273" title="All 2 branches covered.">                                if (candyDAO.getCandy(randomcandy) != null) {</span>
+<span class="fc" id="L274">                                    gencandy = candyDAO.getCandy(randomcandy);</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">                                    if (gencandy.getAmount() &gt; 0) {</span>
+<span class="fc" id="L276">                                        break;</span>
+                                    }
+                                }
+<span class="fc" id="L279">                                randomcandy = numgen.nextInt(candyDAO.getNextId());</span>
+                            }
+<span class="fc" id="L281">                            gencandy.setAmount(gencandy.getAmount()-1);</span>
+<span class="fc" id="L282">                            Integer num = cart.get(gencandy.getId());</span>
+<span class="fc bfc" id="L283" title="All 2 branches covered.">                            if (num == null) {cart.put(gencandy.getId(), 1);}</span>
+<span class="fc" id="L284">                            else {cart.put(gencandy.getId(), cart.get(gencandy.getId()) + 1);}</span>
+<span class="fc" id="L285">                            candyDAO.updateCandy(gencandy);</span>
+                        }
+<span class="fc" id="L287">                        sbox_counter--;</span>
+                    }
+<span class="fc bfc" id="L289" title="All 2 branches covered.">                    while(lbox_counter &gt; 0){</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">                        for (int i = 0; i &lt; 20; i++){</span>
+                            Candy gencandy;
+<span class="fc" id="L292">                            int randomcandy = numgen.nextInt(candyDAO.getNextId());</span>
+                            while (true) {
+<span class="fc bfc" id="L294" title="All 2 branches covered.">                                if (candyDAO.getCandy(randomcandy) != null) {</span>
+<span class="fc" id="L295">                                    gencandy = candyDAO.getCandy(randomcandy);</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">                                    if (gencandy.getAmount() &gt; 0) {</span>
+<span class="fc" id="L297">                                        break;</span>
+                                    }
+                                }
+<span class="fc" id="L300">                                randomcandy = numgen.nextInt(candyDAO.getNextId());</span>
+                            }
+<span class="fc" id="L302">                            gencandy.setAmount(gencandy.getAmount()-1);</span>
+<span class="fc" id="L303">                            Integer num = cart.get(gencandy.getId());</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">                            if (num == null) {cart.put(gencandy.getId(), 1);}</span>
+<span class="fc" id="L305">                            else {cart.put(gencandy.getId(), cart.get(gencandy.getId()) + 1);}</span>
+<span class="fc" id="L306">                            candyDAO.updateCandy(gencandy);</span>
+                        }
+<span class="fc" id="L308">                        lbox_counter--;</span>
+                    }
+<span class="fc" id="L310">                    customer.setpreviousOrder(cart);</span>
+<span class="fc" id="L311">                    Map&lt;Integer,Integer&gt; newCart = new HashMap&lt;Integer,Integer&gt;();</span>
+<span class="fc" id="L312">                    customer.setCart(newCart);</span>
+<span class="fc" id="L313">                    updateCustomer(customer);</span>
+<span class="fc" id="L314">                    return new ResponseEntity&lt;Customer&gt;(customer,HttpStatus.OK);</span>
+                }
+            }
+            else
+<span class="fc" id="L318">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc" id="L320">        catch(IOException e) {</span>
+<span class="fc" id="L321">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L322">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

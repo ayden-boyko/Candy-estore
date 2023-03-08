@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Customer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.model</a> &gt; <span class="el_source">Customer.java</span></div><h1>Customer.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.model;
+
+import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+/**
+ * Represents a Customer entity
+ * 
+ * @author Aitan Bachrach, Liang Chu
+ */
+public class Customer {
+<span class="fc" id="L17">    private static final Logger LOG = Logger.getLogger(Customer.class.getName());</span>
+
+    // Package private for tests
+    static final String STRING_FORMAT = &quot;Customer [id=%d, username=%s, cart=%s]&quot;;
+
+    @JsonProperty(&quot;id&quot;) private int id;
+    @JsonProperty(&quot;username&quot;) private String username;
+    @JsonProperty(&quot;cart&quot;) private Map&lt;Integer, Integer&gt; cart;
+    @JsonProperty(&quot;previousOrder&quot;) private Map&lt;Integer, Integer&gt; previousOrder;
+
+    /**
+     * Create a Customer with the given id and username
+     * @param id The id of the Customer
+     * @param username The username of the Customer
+     * 
+     * {@literal @}JsonProperty is used in serialization and deserialization
+     * of the JSON object to the Java object in mapping the fields.  If a field
+     * is not provided in the JSON object, the Java field gets the default Java
+     * value, i.e. 0 for int
+     */
+<span class="fc" id="L37">    public Customer(@JsonProperty(&quot;id&quot;) int id, @JsonProperty(&quot;username&quot;) String name, @JsonProperty(&quot;cart&quot;) Map&lt;Integer, Integer&gt; cart) {</span>
+<span class="fc" id="L38">        this.id = id;</span>
+<span class="fc" id="L39">        this.username = name;</span>
+<span class="fc" id="L40">        this.cart = cart;</span>
+<span class="fc" id="L41">    }</span>
+
+    /**
+     * Retrieves the id of the Customer
+     * @return The id of the Customer
+     */
+<span class="fc" id="L47">    public int getId() {return id;}</span>
+
+    /**
+     * Sets the username of the Customer - necessary for JSON object to Java object deserialization
+     * @param name The username of the Customer
+     */
+<span class="fc" id="L53">    public void setUsername(String username) {this.username = username;}</span>
+
+    /**
+     * Retrieves the username of the Customer
+     * @return The name of the Customer
+     */
+<span class="fc" id="L59">    public String getUsername() {return username;}</span>
+
+    /* TODO */
+<span class="fc" id="L62">    public Map&lt;Integer,Integer&gt; getCart() {return cart;}</span>
+
+
+    /* TODO */
+    public void setCart(Map&lt;Integer,Integer&gt; cart){
+<span class="fc" id="L67">        this.cart = cart;</span>
+<span class="fc" id="L68">    }</span>
+
+    public void setpreviousOrder(Map&lt;Integer,Integer&gt; cart){
+<span class="fc" id="L71">        this.previousOrder = cart;</span>
+<span class="fc" id="L72">    }</span>
+
+    public Map&lt;Integer, Integer&gt; getPreviousOrder(){
+<span class="nc" id="L75">        return previousOrder;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L83">        return String.format(STRING_FORMAT,id,username,new JSONObject(cart));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

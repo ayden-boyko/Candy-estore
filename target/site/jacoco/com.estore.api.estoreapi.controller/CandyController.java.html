@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CandyController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.controller</a> &gt; <span class="el_source">CandyController.java</span></div><h1>CandyController.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.estore.api.estoreapi.persistence.CandyDAO;
+import com.estore.api.estoreapi.model.Candy;
+
+/**
+ * Handles the REST API requests for the Candy resource
+ * &lt;p&gt;
+ * {@literal @}RestController Spring annotation identifies this class as a REST API
+ * method handler to the Spring framework
+ * 
+ * @author SWEN Faculty
+ */
+
+@RestController
+@RequestMapping(&quot;candies&quot;)
+public class CandyController {
+<span class="fc" id="L34">    private static final Logger LOG = Logger.getLogger(CandyController.class.getName());</span>
+    private CandyDAO CandyDao;
+
+    /**
+     * Creates a REST API controller to reponds to requests
+     * 
+     * @param CandyDao The {@link CandyDAO Candy Data Access Object} to perform CRUD operations
+     * &lt;br&gt;
+     * This dependency is injected by the Spring Framework
+     */
+<span class="fc" id="L44">    public CandyController(CandyDAO CandyDao) {</span>
+<span class="fc" id="L45">        this.CandyDao = CandyDao;</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Responds to the GET request for a {@linkplain Candy Candy} for the given id
+     * 
+     * @param id The id used to locate the {@link Candy Candy}
+     * 
+     * @return ResponseEntity with {@link Candy Candy} object and HTTP status of OK if found&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Candy&gt; getCandy(@PathVariable int id) {
+<span class="fc" id="L59">        LOG.info(&quot;GET /candies/&quot; + id);</span>
+        try {
+<span class="fc" id="L61">            Candy candy = CandyDao.getCandy(id);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (candy != null)</span>
+<span class="fc" id="L63">                return new ResponseEntity&lt;Candy&gt;(candy,HttpStatus.OK);</span>
+            else
+<span class="fc" id="L65">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc" id="L67">        catch(IOException e) {</span>
+<span class="fc" id="L68">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L69">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Responds to the GET request for all {@linkplain Candy Candies}
+     * 
+     * @return ResponseEntity with array of {@link Candy Candy} objects (may be empty) and
+     * HTTP status of OK&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @GetMapping(&quot;&quot;)
+    public ResponseEntity&lt;Candy[]&gt; getCandies() {
+<span class="fc" id="L82">        LOG.info(&quot;GET /candies&quot;);</span>
+
+        try {
+<span class="fc" id="L85">            Candy[] candies = CandyDao.getCandies();</span>
+<span class="fc" id="L86">            return new ResponseEntity&lt;Candy[]&gt;(candies,HttpStatus.OK);</span>
+        }
+<span class="fc" id="L88">        catch(IOException e) {</span>
+<span class="fc" id="L89">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L90">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Responds to the GET request for all {@linkplain Candy Candies} whose name contains
+     * the text in name
+     * 
+     * @param name The name parameter which contains the text used to find the {@link Candy Candies}
+     * 
+     * @return ResponseEntity with array of {@link Candy Candy} objects (may be empty) and
+     * HTTP status of OK&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     * &lt;p&gt;
+     * Example: Find all Candies that contain the text &quot;ma&quot;
+     * GET http://localhost:8080/Candies/?name=ma
+     */
+    @GetMapping(&quot;/&quot;)
+    public ResponseEntity&lt;Candy[]&gt; searchCandies(@RequestParam String name) {
+<span class="fc" id="L109">        LOG.info(&quot;GET /candies/?name=&quot;+name);</span>
+        try{
+<span class="fc" id="L111">            Candy[] candies = CandyDao.findCandies(name);</span>
+<span class="fc" id="L112">            return new ResponseEntity&lt;&gt;(candies, HttpStatus.OK);</span>
+        }
+<span class="fc" id="L114">        catch(IOException e){</span>
+<span class="fc" id="L115">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Creates a {@linkplain Candy Candy} with the provided Candy object
+     * 
+     * @param Candy - The {@link Candy Candy} to create
+     * 
+     * @return ResponseEntity with created {@link Candy Candy} object and HTTP status of CREATED&lt;br&gt;
+     * ResponseEntity with HTTP status of CONFLICT if {@link Candy Candy} object already exists&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PostMapping(&quot;&quot;)
+    public ResponseEntity&lt;Candy&gt; createCandy(@RequestBody Candy candy) {
+<span class="fc" id="L130">        LOG.info(&quot;POST /candies/&quot; + candy);</span>
+        /*
+        try {
+            Candy[] checkAgainst = CandyDao.findCandies(candy.getName());
+            Boolean alreadyExists = false;
+            for (int i = 0; i&lt;checkAgainst.length; i++){
+                if (checkAgainst[i].getName().equals(candy.getName())){
+                    alreadyExists = true;
+                    break;
+                }
+            }
+            if (alreadyExists){
+                return new ResponseEntity&lt;Candy&gt;(HttpStatus.CONFLICT);
+            }
+            else{
+            Candy newCandy = CandyDao.createCandy(candy); 
+            return new ResponseEntity&lt;Candy&gt;(newCandy, HttpStatus.CREATED);
+            }
+        }
+        catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        */
+        try {
+<span class="fc" id="L155">            Candy newCandy = CandyDao.createCandy(candy);</span>
+            // when productFound is false, meaning product is not found
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            if (newCandy != null) {</span>
+<span class="fc" id="L158">                return new ResponseEntity&lt;&gt;(newCandy, HttpStatus.CREATED);</span>
+            } else {
+<span class="fc" id="L160">                return new ResponseEntity&lt;&gt;(HttpStatus.CONFLICT);</span>
+            }
+<span class="fc" id="L162">        } catch (IOException e) {</span>
+<span class="fc" id="L163">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L164">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Updates the {@linkplain Candy Candy} with the provided {@linkplain Candy Candy} object, if it exists
+     * 
+     * @param Candy The {@link Candy Candy} to update
+     * 
+     * @return ResponseEntity with updated {@link Candy Candy} object and HTTP status of OK if updated&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PutMapping(&quot;&quot;)
+    public ResponseEntity&lt;Candy&gt; updateCandy(@RequestBody Candy Candy) {
+<span class="fc" id="L179">        LOG.info(&quot;PUT /candies &quot; + Candy);</span>
+
+        try {
+<span class="fc" id="L182">            Candy candy_updated = CandyDao.updateCandy(Candy);</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">            if (candy_updated != null)</span>
+<span class="fc" id="L184">                return new ResponseEntity&lt;Candy&gt;(candy_updated,HttpStatus.OK);</span>
+            else
+<span class="fc" id="L186">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc" id="L188">        catch(IOException e) {</span>
+<span class="fc" id="L189">            LOG.log(Level.SEVERE,e.getLocalizedMessage());</span>
+<span class="fc" id="L190">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Deletes a {@linkplain Candy Candy} with the given id
+     * 
+     * @param id The id of the {@link Candy Candy} to deleted
+     * 
+     * @return ResponseEntity HTTP status of OK if deleted&lt;br&gt;
+     * ResponseEntity with HTTP status of NOT_FOUND if not found&lt;br&gt;
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Candy&gt; deleteCandy(@PathVariable int id) {
+<span class="fc" id="L205">        LOG.info(&quot;DELETE/candy/&quot;+id);</span>
+            try{
+<span class="fc bfc" id="L207" title="All 2 branches covered.">                if(CandyDao.deleteCandy(id)){</span>
+<span class="fc" id="L208">                    return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+                }
+                else{
+<span class="fc" id="L211">                    return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+                }
+<span class="fc" id="L213">            }catch(IOException e){</span>
+<span class="fc" id="L214">                return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+            }
+    }
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

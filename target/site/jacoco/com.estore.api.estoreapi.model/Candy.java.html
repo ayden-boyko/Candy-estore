@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Candy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.model</a> &gt; <span class="el_source">Candy.java</span></div><h1>Candy.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.model;
+
+import java.util.logging.Logger;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+/**
+ * Represents a Candy entity
+ * 
+ * @author SWEN Faculty
+ */
+public class Candy {
+<span class="fc" id="L12">    private static final Logger LOG = Logger.getLogger(Candy.class.getName());</span>
+
+    // Package private for tests
+    static final String STRING_FORMAT = &quot;Candy [id=%d, name=%s, amount=%d, price=%.2f, description=%s, ratingTotal=%.2f, ratingNum=%.2f]&quot;;
+
+    @JsonProperty(&quot;id&quot;) private int id;
+    @JsonProperty(&quot;name&quot;) private String name;
+    @JsonProperty(&quot;amount&quot;) private int amount;
+    @JsonProperty(&quot;price&quot;) private double price;
+    @JsonProperty(&quot;description&quot;) private String description;
+    @JsonProperty(&quot;ratingTotal&quot;) private double ratingTotal;
+    @JsonProperty(&quot;ratingNum&quot;) private double ratingNum;
+
+    /**
+     * Create a Candy with the given id and name
+     * @param id The id of the Candy
+     * @param name The name of the Candy
+     * 
+     * {@literal @}JsonProperty is used in serialization and deserialization
+     * of the JSON object to the Java object in mapping the fields.  If a field
+     * is not provided in the JSON object, the Java field gets the default Java
+     * value, i.e. 0 for int
+     */
+    public Candy(@JsonProperty(&quot;id&quot;) int id, @JsonProperty(&quot;name&quot;) String name, @JsonProperty(&quot;amount&quot;) int amount, 
+        @JsonProperty(&quot;price&quot;) double price, @JsonProperty(&quot;description&quot;) String description, 
+<span class="fc" id="L37">        @JsonProperty(&quot;ratingTotal&quot;) double ratingTotal, @JsonProperty(&quot;ratingNum&quot;) double ratingNum) {</span>
+<span class="fc" id="L38">        this.id = id;</span>
+<span class="fc" id="L39">        this.name = name;</span>
+<span class="fc" id="L40">        this.amount = amount;</span>
+<span class="fc" id="L41">        this.price = price;</span>
+<span class="fc" id="L42">        this.description = description;</span>
+<span class="fc" id="L43">        this.ratingTotal = ratingTotal;</span>
+<span class="fc" id="L44">        this.ratingNum = ratingNum;</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Retrieves the id of the Candy
+     * @return The id of the Candy
+     */
+<span class="fc" id="L51">    public int getId() {return id;}</span>
+
+    /**
+     * Sets the name of the Candy - necessary for JSON object to Java object deserialization
+     * @param name The name of the Candy
+     */
+<span class="fc" id="L57">    public void setName(String name) {this.name = name;}</span>
+
+    /**
+     * Retrieves the name of the Candy
+     * @return The name of the Candy
+     */
+<span class="fc" id="L63">    public String getName() {return name;}</span>
+
+    /**
+     * Changes the amount in stock of the Candy
+     * @return The amount of the Candy
+     */
+<span class="fc" id="L69">    public void setAmount(int amount) {this.amount=amount;}</span>
+
+    /**
+     * Retrieves the amount in stock of the Candy
+     * @return The amount of the Candy
+     */
+<span class="fc" id="L75">    public int getAmount() {return amount;}</span>
+
+    /**
+     * Sets the price of the Candy
+     * @param price The price of the Candy 
+     */
+<span class="fc" id="L81">    public void setPrice(double price) {this.price = price;}</span>
+    
+    /**
+     * Retrieves the price of the Candy
+     * @return The price of the Candy
+     */
+<span class="fc" id="L87">    public double getPrice() {return price;}</span>
+
+    /**
+     * Retrieves the description of the Candy
+     * @return The description of the Candy
+     */
+<span class="fc" id="L93">    public String getDescription() {return description;}</span>
+
+    /**
+     * Set the rating total of the Candy
+     * @param int the new rating total
+     */
+<span class="fc" id="L99">    public void setRatingTotal(double ratingTotal) {this.ratingTotal = ratingTotal;}</span>
+
+    /**
+     * Retrieves the price of the Candy
+     * @return The price of the Candy
+     */
+<span class="fc" id="L105">    public double getRatingTotal() {return ratingTotal;}</span>
+
+    /**
+     * Set the number of ratings of the Candy
+     * @param int the new number of ratings
+     */
+<span class="fc" id="L111">    public void setRatingNum(double ratingNum) {this.ratingNum = ratingNum;}</span>
+
+    /**
+     * Retrieves the price of the Candy
+     * @return The price of the Candy
+     */
+<span class="fc" id="L117">    public double getRatingNum() {return ratingNum;}</span>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L124">        return String.format(STRING_FORMAT,id,name,amount,price,description,ratingTotal,ratingNum);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
